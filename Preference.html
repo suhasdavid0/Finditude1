@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finditude - Booking System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            background-image: url('sunset.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .auth-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .auth-toggle button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #7f8c8d;
+            border-bottom: 2px solid transparent;
+            width: auto;
+        }
+        
+        .auth-toggle button.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            font-weight: 600;
+        }
+        
+        .preference-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .preference-option {
+            background: #ecf0f1;
+            padding: 15px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .preference-option:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .preference-option input {
+            margin-right: 10px;
+        }
+        
+        .spot-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .spot-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .spot-info {
+            flex-grow: 1;
+        }
+        
+        .spot-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .spot-type {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .spot-tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .tag {
+            background: #e0f7fa;
+            color: #00838f;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .radio-option:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .radio-option input {
+            width: auto;
+        }
+        
+        .location-info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .confirmation-code {
+            font-size: 24px;
+            color: #27ae60;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .back-btn {
+            background: #95a5a6;
+        }
+        
+        .back-btn:hover {
+            background: #7f8c8d;
+        }
+        
+        #auth-section {
+            display: block;
+        }
+        
+        #booking-app {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Section -->
+    <div id="auth-section" class="auth-container">
+        <div class="auth-toggle">
+            <button id="login-tab" class="active">Login</button>
+            <button id="signup-tab">Sign Up</button>
+        </div>
+        
+        <div id="login-form">
+            <h2>Welcome Back</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                
+                <button type="submit">Login</button>
+                <div id="login-error" class="error-message"></div>
+            </form>
+        </div>
+        
+        <div id="signup-form" style="display: none;">
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" required>
+                </div>
+                
+                <button type="submit">Sign Up</button>
+                <div id="signup-error" class="error-message"></div>
+                <div id="signup-success" class="success-message"></div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Main Booking App (initially hidden) -->
+    <div id="booking-app" class="container">
+        <!-- Step 1: ZIP Code Input -->
+        <div id="location-section" class="section active">
+            <h2>Enter Your Location</h2>
+            <p>Please enter your ZIP code to find spots near you:</p>
+            
+            <form id="locationForm">
+                <div class="form-group">
+                    <label for="zipcode">US ZIP Code</label>
+                    <input type="text" id="zipcode" pattern="\d{5}" maxlength="5" required>
+                    <small>Enter a 5-digit US ZIP code</small>
+                </div>
+                
+                <button type="submit" id="find-location-btn">
+                    <span id="find-location-text">Find Location</span>
+                    <span id="find-location-loader" class="loading" style="display: none;"></span>
+                </button>
+                
+                <div id="location-error" class="error-message" style="display: none;"></div>
+                
+                <div id="location-result" class="location-info" style="display: none;">
+                    <p>Location: <strong id="location-place"></strong></p>
+                    <p>State: <strong id="location-state"></strong></p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 2: Solo or With Friends -->
+        <div id="company-section" class="section">
+            <h2>Are You Going Solo or With Friends?</h2>
+            <p>Select your company preference:</p>
+            
+            <form id="companyForm">
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="company" value="Solo" required> Solo
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="company" value="Friends"> With Friends
+                    </label>
+                </div>
+                
+                <div class="navigation">
+                    <button type="button" class="back-btn" id="back-to-location">Back</button>
+                    <button type="submit">Next</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 3: Parking Friendly -->
+        <div id="parking-section" class="section">
+            <h2>Parking Availability</h2>
+            <p>Do you need parking-friendly locations?</p>
+            
+            <form id="parkingForm">
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="parking" value="Yes" required> Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="parking" value="No"> No
+                    </label>
+                </div>
+                
+                <div class="navigation">
+                    <button type="button" class="back-btn" id="back-to-company">Back</button>
+                    <button type="submit">Next</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 4: Loud Places -->
+        <div id="loudness-section" class="section">
+            <h2>Noise Preference</h2>
+            <p>Would you prefer loud places?</p>
+            
+            <form id="loudnessForm">
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="loudness" value="Yes" required> Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="loudness" value="No"> No
+                    </label>
+                </div>
+                
+                <div class="navigation">
+                    <button type="button" class="back-btn" id="back-to-parking">Back</button>
+                    <button type="submit">Next</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 5: Preferences -->
+        <div id="preferences-section" class="section">
+            <h2>Select Your Preferences</h2>
+            <p>Choose what kind of experience you're looking for:</p>
+            
+            <form id="preferencesForm">
+                <div class="preference-options">
+                    <label class="preference-option">
+                        <input type="checkbox" name="Relax"> Relax
+                    </label>
+                    <label class="preference-option">
+                        <input type="checkbox" name="Hangout"> Hangout
+                    </label>
+                    <label class="preference-option">
+                        <input type="checkbox" name="Music"> Music
+                    </label>
+                    <label class="preference-option">
+                        <input type="checkbox" name="Food"> Food
+                    </label>
+                    <label class="preference-option">
+                        <input type="checkbox" name="Adventure"> Adventure
+                    </label>
+                </div>
+                
+                <div class="navigation">
+                    <button type="button" class="back-btn" id="back-to-loudness">Back</button>
+                    <button type="submit" id="find-spots-btn">Find Spots</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 6: Spot Selection -->
+        <div id="spots-section" class="section">
+            <h2>Suggested Hangout Spots</h2>
+            <p>Based on your preferences, we found these great options near <strong id="search-location"></strong>:</p>
+            
+            <ul class="spot-list" id="results-list"></ul>
+            
+            <div class="navigation">
+                <button class="back-btn" id="back-to-preferences">Back</button>
+            </div>
+        </div>
+        
+        <!-- Step 7: Date & Time -->
+        <div id="datetime-section" class="section">
+            <h2>Select Date & Time</h2>
+            <p>Booking for: <strong id="selected-spot-name"></strong></p>
+            
+            <form id="datetimeForm">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="time">Time</label>
+                    <input type="time" id="time" required>
+                </div>
+                
+                <div class="navigation">
+                    <button type="button" class="back-btn" id="back-to-spots">Back</button>
+                    <button type="submit">Proceed to Details</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 8: Personal Details -->
+        <div id="details-section" class="section">
+            <h2>Enter Your Details</h2>
+            <p>Booking for: <strong id="booking-spot-name"></strong></p>
+            <p>On: <strong id="booking-datetime"></strong></p>
+            
+            <form id="detailsForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="navigation">
+                    <button type="button" class="back-btn" id="back-to-datetime">Back</button>
+                    <button type="submit">Complete Booking</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Step 9: Confirmation -->
+        <div id="confirmation-section" class="section">
+            <h2>Booking Confirmed!</h2>
+            <p>Thank you for your booking. Here are your details:</p>
+            
+            <div class="confirmation-details">
+                <p><strong>Location:</strong> <span id="confirm-spot-name"></span></p>
+                <p><strong>Date & Time:</strong> <span id="confirm-datetime"></span></p>
+                <p><strong>Name:</strong> <span id="confirm-name"></span></p>
+                <p><strong>Contact:</strong> <span id="confirm-contact"></span></p>
+                <p><strong>Company:</strong> <span id="confirm-company"></span></p>
+                <p><strong>Parking Needed:</strong> <span id="confirm-parking"></span></p>
+                <p><strong>Loudness Preference:</strong> <span id="confirm-loudness"></span></p>
+            </div>
+            
+            <p>Your confirmation code:</p>
+            <div class="confirmation-code" id="confirmationCode"></div>
+            
+            <p>We've sent a copy of this confirmation to your email.</p>
+            
+            <button id="new-booking-btn">Make Another Booking</button>
+            <button id="share-btn" style="background: #2ecc71;">Share Booking</button>
+            <button id="logout-btn" style="margin-top: 10px; background: #e74c3c;">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // User Database (simulated with localStorage)
+        let userDatabase = {};
+        
+        // Check if there are users in localStorage
+        if (localStorage.getItem('userDatabase')) {
+            userDatabase = JSON.parse(localStorage.getItem('userDatabase'));
+        } else {
+            // Add a default test user if no users exist
+            userDatabase = {
+                'test@example.com': {
+                    name: 'Test User',
+                    email: 'test@example.com',
+                    password: 'password123',
+                    bookings: []
+                }
+            };
+            localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+        }
+        
+        // Current user
+        let currentUser = null;
+        
+        // DOM Elements
+        const authSection = document.getElementById('auth-section');
+        const bookingApp = document.getElementById('booking-app');
+        const loginTab = document.getElementById('login-tab');
+        const signupTab = document.getElementById('signup-tab');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const loginError = document.getElementById('login-error');
+        const signupError = document.getElementById('signup-error');
+        const signupSuccess = document.getElementById('signup-success');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Toggle between login and signup forms
+        loginTab.addEventListener('click', function() {
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            loginError.textContent = '';
+            signupError.textContent = '';
+            signupSuccess.textContent = '';
+        });
+        
+        signupTab.addEventListener('click', function() {
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            loginError.textContent = '';
+            signupError.textContent = '';
+            signupSuccess.textContent = '';
+        });
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            // Check if user exists and password matches
+            if (userDatabase[email] && userDatabase[email].password === password) {
+                currentUser = userDatabase[email];
+                authSection.style.display = 'none';
+                bookingApp.style.display = 'block';
+                loginError.textContent = '';
+                
+                // Store logged in user in localStorage
+                localStorage.setItem('loggedInUser', JSON.stringify({
+                    email: email,
+                    password: password
+                }));
+            } else {
+                loginError.textContent = 'Invalid email or password';
+            }
+        });
+        
+        // Signup form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+            
+            // Validate
+            if (password !== confirm) {
+                signupError.textContent = 'Passwords do not match';
+                return;
+            }
+            
+            if (userDatabase[email]) {
+                signupError.textContent = 'Email already registered';
+                return;
+            }
+            
+            // Create new user
+            userDatabase[email] = {
+                name: name,
+                email: email,
+                password: password,
+                bookings: []
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+            
+            // Show success message
+            signupError.textContent = '';
+            signupSuccess.textContent = 'Account created successfully! Please login.';
+            
+            // Switch to login form
+            loginTab.click();
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = '';
+        });
+        
+        // Logout button
+        logoutBtn.addEventListener('click', function() {
+            currentUser = null;
+            bookingApp.style.display = 'none';
+            authSection.style.display = 'block';
+            
+            // Remove logged in user from localStorage
+            localStorage.removeItem('loggedInUser');
+            
+            // Reset to login form
+            loginTab.click();
+            document.getElementById('loginForm').reset();
+            
+            // Reset booking app
+            resetBookingApp();
+        });
+        
+        // Check if user is already logged in (from previous session)
+        function checkLoggedIn() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                const user = JSON.parse(loggedInUser);
+                if (userDatabase[user.email] && userDatabase[user.email].password === user.password) {
+                    currentUser = userDatabase[user.email];
+                    authSection.style.display = 'none';
+                    bookingApp.style.display = 'block';
+                }
+            }
+        }
+        
+        // Run check on page load
+        checkLoggedIn();
+
+        // Booking App Functionality
+        const sections = {
+            location: document.getElementById('location-section'),
+            company: document.getElementById('company-section'),
+            parking: document.getElementById('parking-section'),
+            loudness: document.getElementById('loudness-section'),
+            preferences: document.getElementById('preferences-section'),
+            spots: document.getElementById('spots-section'),
+            datetime: document.getElementById('datetime-section'),
+            details: document.getElementById('details-section'),
+            confirmation: document.getElementById('confirmation-section')
+        };
+        
+        const spotList = document.getElementById('results-list');
+        const selectedSpotName = document.getElementById('selected-spot-name');
+        const bookingSpotName = document.getElementById('booking-spot-name');
+        const bookingDateTime = document.getElementById('booking-datetime');
+        const confirmSpotName = document.getElementById('confirm-spot-name');
+        const confirmDateTime = document.getElementById('confirm-datetime');
+        const confirmName = document.getElementById('confirm-name');
+        const confirmContact = document.getElementById('confirm-contact');
+        const confirmCompany = document.getElementById('confirm-company');
+        const confirmParking = document.getElementById('confirm-parking');
+        const confirmLoudness = document.getElementById('confirm-loudness');
+        const confirmationCode = document.getElementById('confirmationCode');
+        const searchLocation = document.getElementById('search-location');
+        const locationPlace = document.getElementById('location-place');
+        const locationState = document.getElementById('location-state');
+        const locationError = document.getElementById('location-error');
+        const findLocationBtn = document.getElementById('find-location-btn');
+        const findLocationText = document.getElementById('find-location-text');
+        const findLocationLoader = document.getElementById('find-location-loader');
+        
+        // Data
+        const spotsData = {
+            // Sample data for different locations
+            '10001': [ // New York, NY
+                { name: "Central Park", type: "Park", tags: ["Relax", "Hangout"], parking: true, loud: false },
+                { name: "Times Square", type: "Landmark", tags: ["Hangout", "Adventure"], parking: false, loud: true },
+                { name: "Metropolitan Museum", type: "Museum", tags: ["Relax", "Music"], parking: true, loud: false }
+            ],
+            '90001': [ // Los Angeles, CA
+                { name: "Santa Monica Pier", type: "Attraction", tags: ["Relax", "Hangout", "Adventure"], parking: true, loud: false },
+                { name: "Hollywood Walk of Fame", type: "Landmark", tags: ["Hangout", "Adventure"], parking: false, loud: true },
+                { name: "Griffith Observatory", type: "Museum", tags: ["Relax"], parking: true, loud: false }
+            ],
+            '60601': [ // Chicago, IL
+                { name: "Millennium Park", type: "Park", tags: ["Relax", "Hangout"], parking: true, loud: false },
+                { name: "Navy Pier", type: "Attraction", tags: ["Hangout", "Adventure", "Food"], parking: true, loud: true },
+                { name: "Art Institute of Chicago", type: "Museum", tags: ["Relax"], parking: true, loud: false }
+            ],
+            'default': [
+                { name: "Beachfront Cafe", type: "Restaurant", tags: ["Relax", "Hangout", "Food"], parking: true, loud: false },
+                { name: "Museum of Modern Art", type: "Museum", tags: ["Music", "Relax"], parking: true, loud: false },
+                { name: "Rock Climbing Gym", type: "Adventure", tags: ["Adventure"], parking: true, loud: true },
+                { name: "Live Music Lounge", type: "Nightclub", tags: ["Music", "Hangout"], parking: false, loud: true },
+                { name: "Sushi Bar", type: "Restaurant", tags: ["Food", "Hangout"], parking: false, loud: false }
+            ]
+        };
+        
+        let selectedSpot = null;
+        let bookingDate = '';
+        let bookingTime = '';
+        let userPreferences = {
+            location: '',
+            placeName: '',
+            state: '',
+            company: '',
+            parking: '',
+            loudness: '',
+            activities: []
+        };
+        
+        // Event Listeners for Booking App
+        document.getElementById('locationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const zipcode = document.getElementById('zipcode').value.trim();
+            
+            // Show loading state
+            findLocationText.textContent = 'Searching...';
+            findLocationLoader.style.display = 'inline-block';
+            locationError.style.display = 'none';
+            
+            try {
+                // Fetch location data from Zippopotam.us API
+                const response = await fetch(`https://api.zippopotam.us/us/${zipcode}`);
+                
+                if (!response.ok) {
+                    throw new Error('Invalid ZIP code or location not found');
+                }
+                
+                const data = await response.json();
+                
+                // Extract location information
+                const place = data.places[0];
+                const placeName = place['place name'];
+                const state = place['state'];
+                
+                // Update UI with location info
+                locationPlace.textContent = `${placeName}, ${state}`;
+                locationState.textContent = state;
+                document.getElementById('location-result').style.display = 'block';
+                
+                // Store location data
+                userPreferences.location = zipcode;
+                userPreferences.placeName = placeName;
+                userPreferences.state = state;
+                
+                // Update search location display
+                searchLocation.textContent = `${placeName}, ${state}`;
+                
+                // Proceed to next section
+                showSection('company');
+            } catch (error) {
+                locationError.textContent = error.message;
+                locationError.style.display = 'block';
+            } finally {
+                // Reset button state
+                findLocationText.textContent = 'Find Location';
+                findLocationLoader.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('companyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            userPreferences.company = this.querySelector('input[name="company"]:checked').value;
+            showSection('parking');
+        });
+        
+        document.getElementById('parkingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            userPreferences.parking = this.querySelector('input[name="parking"]:checked').value;
+            showSection('loudness');
+        });
+        
+        document.getElementById('loudnessForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            userPreferences.loudness = this.querySelector('input[name="loudness"]:checked').value;
+            showSection('preferences');
+        });
+        
+        document.getElementById('preferencesForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            userPreferences.activities = Array.from(this.querySelectorAll('input:checked'))
+                .map(input => input.name);
+            
+            showSpots();
+            showSection('spots');
+        });
+        
+        document.getElementById('back-to-location').addEventListener('click', function() {
+            showSection('location');
+        });
+        
+        document.getElementById('back-to-company').addEventListener('click', function() {
+            showSection('company');
+        });
+        
+        document.getElementById('back-to-parking').addEventListener('click', function() {
+            showSection('parking');
+        });
+        
+        document.getElementById('back-to-loudness').addEventListener('click', function() {
+            showSection('loudness');
+        });
+        
+        document.getElementById('back-to-preferences').addEventListener('click', function() {
+            showSection('preferences');
+        });
+        
+        document.getElementById('back-to-spots').addEventListener('click', function() {
+            showSection('spots');
+        });
+        
+        document.getElementById('back-to-datetime').addEventListener('click', function() {
+            showSection('datetime');
+        });
+        
+        document.getElementById('datetimeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            bookingDate = document.getElementById('date').value;
+            bookingTime = document.getElementById('time').value;
+            
+            // Format date for display
+            const dateObj = new Date(bookingDate);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = dateObj.toLocaleDateString('en-US', options);
+            
+            bookingSpotName.textContent = selectedSpot.name;
+            bookingDateTime.textContent = `${formattedDate} at ${bookingTime}`;
+            
+            showSection('details');
+        });
+        
+        document.getElementById('detailsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            
+            // Format date for confirmation
+            const dateObj = new Date(bookingDate);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = dateObj.toLocaleDateString('en-US', options);
+            
+            // Set confirmation details
+            confirmSpotName.textContent = selectedSpot.name;
+            confirmDateTime.textContent = `${formattedDate} at ${bookingTime}`;
+            confirmName.textContent = name;
+            confirmContact.textContent = `${phone} | ${email}`;
+            confirmCompany.textContent = userPreferences.company;
+            confirmParking.textContent = userPreferences.parking;
+            confirmLoudness.textContent = userPreferences.loudness;
+            
+            // Generate confirmation code
+            const code = 'BK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            confirmationCode.textContent = code;
+            
+            // Save booking to user's account if logged in
+            if (currentUser) {
+                currentUser.bookings.push({
+                    spot: selectedSpot.name,
+                    date: bookingDate,
+                    time: bookingTime,
+                    confirmationCode: code,
+                    details: {
+                        name: name,
+                        address: address,
+                        phone: phone,
+                        email: email
+                    }
+                });
+                
+                // Update user database
+                userDatabase[currentUser.email] = currentUser;
+                localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+            }
+            
+            showSection('confirmation');
+        });
+        
+        document.getElementById('new-booking-btn').addEventListener('click', function() {
+            resetBookingApp();
+            showSection('location');
+        });
+        
+        // Functions
+        function showSection(sectionName) {
+            // Hide all sections
+            Object.values(sections).forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show requested section
+            sections[sectionName].classList.add('active');
+        }
+        
+        function showSpots() {
+            spotList.innerHTML = '';
+            
+            // Get spots for the selected location or default spots
+            const locationSpots = spotsData[userPreferences.location] || spotsData['default'];
+            
+            // Filter spots based on all preferences
+            const filteredSpots = locationSpots.filter(spot => {
+                // Filter by activities
+                const activityMatch = userPreferences.activities.length === 0 || 
+                    userPreferences.activities.some(activity => spot.tags.includes(activity));
+                
+                // Filter by parking
+                const parkingMatch = userPreferences.parking === 'No' || 
+                    (userPreferences.parking === 'Yes' && spot.parking);
+                
+                // Filter by loudness
+                const loudnessMatch = (userPreferences.loudness === 'Yes' && spot.loud) || 
+                    (userPreferences.loudness === 'No' && !spot.loud);
+                
+                return activityMatch && parkingMatch && loudnessMatch;
+            });
+            
+            if (filteredSpots.length === 0) {
+                const noResults = document.createElement('li');
+                noResults.textContent = 'No spots match your preferences. Please try different options.';
+                noResults.style.padding = '20px';
+                noResults.style.textAlign = 'center';
+                spotList.appendChild(noResults);
+                return;
+            }
+            
+            filteredSpots.forEach(spot => {
+                const li = document.createElement('li');
+                li.className = 'spot-item';
+                
+                li.innerHTML = `
+                    <div class="spot-info">
+                        <div class="spot-name">${spot.name}</div>
+                        <div class="spot-type">${spot.type}</div>
+                        <div class="spot-tags">
+                            ${spot.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="spot-features">
+                            <span class="tag">${spot.parking ? 'Parking Available' : 'Limited Parking'}</span>
+                            <span class="tag">${spot.loud ? 'Loud Environment' : 'Quiet Environment'}</span>
+                        </div>
+                    </div>
+                    <button class="select-spot" data-spot-id="${locationSpots.indexOf(spot)}">Select</button>
+                `;
+                
+                spotList.appendChild(li);
+            });
+            
+            // Add event listeners to select buttons
+            document.querySelectorAll('.select-spot').forEach(button => {
+                button.addEventListener('click', function() {
+                    const spotId = parseInt(this.getAttribute('data-spot-id'));
+                    selectedSpot = locationSpots[spotId];
+                    selectedSpotName.textContent = selectedSpot.name;
+                    
+                    // Set minimum date to today
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('date').min = today;
+                    
+                    showSection('datetime');
+                });
+            });
+        }
+        
+        function resetBookingApp() {
+            // Reset forms
+            document.getElementById('locationForm').reset();
+            document.getElementById('companyForm').reset();
+            document.getElementById('parkingForm').reset();
+            document.getElementById('loudnessForm').reset();
+            document.getElementById('preferencesForm').reset();
+            document.getElementById('datetimeForm').reset();
+            document.getElementById('detailsForm').reset();
+            
+            // Hide location result
+            document.getElementById('location-result').style.display = 'none';
+            
+            // Reset variables
+            selectedSpot = null;
+            bookingDate = '';
+            bookingTime = '';
+            userPreferences = {
+                location: '',
+                placeName: '',
+                state: '',
+                company: '',
+                parking: '',
+                loudness: '',
+                activities: []
+            };
+        }
+    </script>
+</body>
+</html>

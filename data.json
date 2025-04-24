@@ -1,0 +1,32 @@
+[
+  {
+      "name": "Central Park",
+      "type": "Park",
+      "tags": ["Relax", "Hangout", "Parks"]
+  },
+  {
+      "name": "Beachfront Cafe",
+      "type": "Restaurant",
+      "tags": ["Relax", "Hangout", "Beaches"]
+  },
+  {
+      "name": "Museum of Modern Art",
+      "type": "Museum",
+      "tags": ["Museums", "Historical Landscapes"]
+  },
+  {
+      "name": "Gaming Hub",
+      "type": "Gaming Station",
+      "tags": ["Hangout", "Gaming"]
+  },
+  {
+      "name": "City Bar",
+      "type": "Bar",
+      "tags": ["Hangout", "Bars"]
+  },
+  {
+      "name": "Music Arena",
+      "type": "Concert",
+      "tags": ["Music", "Concerts"]
+  }
+]

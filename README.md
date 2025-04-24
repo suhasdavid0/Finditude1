@@ -1,1 +1,2 @@
-# Finditude1
+# Finditude
+Principles of Software Development Project

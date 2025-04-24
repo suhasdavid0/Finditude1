@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finditude - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            background-image: url('sunset.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .auth-container {
+            max-width: 400px;
+            width: 90%;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .auth-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .auth-toggle button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #7f8c8d;
+            border-bottom: 2px solid transparent;
+            width: auto;
+        }
+        
+        .auth-toggle button.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            font-weight: 600;
+        }
+        
+        .toggle-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .toggle-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-toggle">
+            <button id="login-tab" class="active">Login</button>
+            <button id="signup-tab">Sign Up</button>
+        </div>
+        
+        <div id="login-form">
+            <h2>Welcome Back</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                
+                <button type="submit">Login</button>
+                <div id="login-error" class="error-message"></div>
+            </form>
+        </div>
+        
+        <div id="signup-form" style="display: none;">
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" required>
+                </div>
+                
+                <button type="submit">Sign Up</button>
+                <div id="signup-error" class="error-message"></div>
+                <div id="signup-success" class="success-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // User Database (simulated with localStorage)
+        let userDatabase = {};
+        
+        // Check if there are users in localStorage
+        if (localStorage.getItem('userDatabase')) {
+            userDatabase = JSON.parse(localStorage.getItem('userDatabase'));
+        } else {
+            // Add a default test user if no users exist
+            userDatabase = {
+                'test@example.com': {
+                    name: 'Test User',
+                    email: 'test@example.com',
+                    password: 'password123',
+                    bookings: []
+                }
+            };
+            localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+        }
+        
+        // Current user
+        let currentUser = null;
+        
+        // DOM Elements
+        const loginTab = document.getElementById('login-tab');
+        const signupTab = document.getElementById('signup-tab');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const loginError = document.getElementById('login-error');
+        const signupError = document.getElementById('signup-error');
+        const signupSuccess = document.getElementById('signup-success');
+        
+        // Toggle between login and signup forms
+        loginTab.addEventListener('click', function() {
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            loginError.textContent = '';
+            signupError.textContent = '';
+            signupSuccess.textContent = '';
+        });
+        
+        signupTab.addEventListener('click', function() {
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            loginError.textContent = '';
+            signupError.textContent = '';
+            signupSuccess.textContent = '';
+        });
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            // Check if user exists and password matches
+            if (userDatabase[email] && userDatabase[email].password === password) {
+                currentUser = userDatabase[email];
+                
+                // Store logged in user in localStorage
+                localStorage.setItem('loggedInUser', JSON.stringify({
+                    email: email,
+                    password: password
+                }));
+                
+                // Redirect to home page
+                window.location.href = 'home.html';
+            } else {
+                loginError.textContent = 'Invalid email or password';
+            }
+        });
+        
+        // Signup form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+            
+            // Validate
+            if (password !== confirm) {
+                signupError.textContent = 'Passwords do not match';
+                return;
+            }
+            
+            if (userDatabase[email]) {
+                signupError.textContent = 'Email already registered';
+                return;
+            }
+            
+            // Create new user
+            userDatabase[email] = {
+                name: name,
+                email: email,
+                password: password,
+                bookings: []
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+            
+            // Show success message
+            signupError.textContent = '';
+            signupSuccess.textContent = 'Account created successfully! Please login.';
+            
+            // Switch to login form
+            loginTab.click();
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = '';
+        });
+
+        function checkLoggedIn() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                const user = JSON.parse(loggedInUser);
+                if (userDatabase[user.email] && userDatabase[user.email].password === user.password) {
+                    // Redirect to home page if already logged in
+                    window.location.href = 'home.html';
+                }
+            }
+        }
+        
+        // Run check on page load
+        checkLoggedIn();
+    </script>
+</body>
+</html>

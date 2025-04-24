@@ -1,0 +1,164 @@
+* {
+    box-sizing: border-box;
+}
+body, section, header, div, p, h1, h2, h3, ul, li, figure, figcaption {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box;
+    background-color: #F0F4F8;
+    font-weight: 300;
+}
+/* Background for the location section */
+#location-section {
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95)),
+        url('your-image-url.jpg') no-repeat center center/cover;
+    padding: 40px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* For dark background images use this instead */
+#location-section.dark-bg {
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+        url('your-dark-image.jpg') no-repeat center center/cover;
+    color: white;
+}
+
+#location-section.dark-bg label,
+#location-section.dark-bg small {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#location-section.dark-bg input {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+nav {
+    background-color: #8B0000; /* Change background color to red */
+    padding: 20px;
+    height: 70px; /* Adjust height to fit content */
+    width: 100%;
+    position: relative;
+}
+nav ul {
+    display: flex; 
+    justify-content: flex-start; 
+    align-items: center; 
+    margin: 0;
+    padding: 0;
+    /*list-style: none;  Remove default list style */
+}
+nav li {
+    margin-left: 20px; /* Add spacing between items */
+}
+
+nav a {
+    color: white; /* Change text color to white for better contrast */
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+}
+
+nav a:visited {
+    color: white; /* Keep visited links white */
+}
+
+nav a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+header {
+    position: relative;
+    height: 500px;
+    
+}
+
+header div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+}
+
+header h2 {
+    text-align: center;
+  
+    font-size: 48px;
+    margin-bottom: 0.5rem;
+}
+header p {
+    font-size: 24px;
+    margin-bottom: 1.5rem;
+}
+
+header div a {
+    background-color: #8B0000;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+body {
+    background-image: url('https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/colors-of-st-louis-at-night-frozen-in-time-fine-art-photography.jpg?raw=true');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+nav {
+    background-color: #8B0000;
+    padding: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+button {
+    background-color: #8B0000;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #a50000;
+}
+
+select {
+    margin: 10px 0;
+    padding: 5px;
+}
+
+#map {
+    border: 2px solid #8B0000;
+    margin-top: 10px;
+}
+main {
+    text-align: center;
+    color: whitesmoke;
+    font-size: medium;
+    font-style: italic;
+}

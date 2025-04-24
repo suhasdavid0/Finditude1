@@ -1,0 +1,9 @@
+flask
+flask-restful
+flask-sqlalchemy
+pymysql
+sqlalchemy
+pandas
+gunicorn  
+werkzeug
+Flask-Mail
